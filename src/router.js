@@ -82,6 +82,108 @@ export const userManage = [
   }
 ]
 
+
+export const productManage = [
+  {
+    path: "/product",
+    component: Home,
+    redirect: "/product/product-list",
+    icon: "shouye",
+    name: "商品管理",
+    noDropdown: true,
+    children: [
+      {
+        path: "product-list",
+        component: function () {
+          return import('@/views/product/ProductList')
+        }
+      }
+    ]
+  }
+]
+
+
+export const productClassManage = [
+  {
+    path: "/product-class",
+    component: Home,
+    redirect: "/product-class/product-class-list",
+    icon: "shouye",
+    name: "商品分类管理",
+    noDropdown: true,
+    children: [
+      {
+        path: "product-class-list",
+        component: function () {
+          return import('@/views/product-class/ProductClassList')
+        }
+      }
+    ]
+  }
+]
+
+
+export const supplierManage = [
+  {
+    path: "/supplier",
+    component: Home,
+    redirect: "/supplier/supplier-list",
+    icon: "shouye",
+    name: "供应商管理",
+    noDropdown: true,
+    children: [
+      {
+        path: "supplier-list",
+        component: function () {
+          return import('@/views/supplier/SupplierList')
+        }
+      }
+    ]
+  }
+]
+
+
+export const purchaseManage = [
+  {
+    path: "/purchase",
+    component: Home,
+    redirect: "/purchase/purchase-list",
+    icon: "shouye",
+    name: "进货管理",
+    noDropdown: true,
+    children: [
+      {
+        path: "purchase-list",
+        component: function () {
+          return import('@/views/purchase/PurchaseList')
+        }
+      }
+    ]
+  }
+]
+
+
+export const sellManage = [
+  {
+    path: "/sell",
+    component: Home,
+    redirect: "/sell/sell-list",
+    icon: "shouye",
+    name: "销售管理",
+    noDropdown: true,
+    children: [
+      {
+        path: "sell-list",
+        component: function () {
+          return import('@/views/sell/SellList')
+        }
+      }
+    ]
+  }
+]
+
+
+
 export default new Router({
   routes: baseRouter
 })

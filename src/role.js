@@ -1,9 +1,9 @@
 import router from "@/router.js";
 import store from "./store/index";
-import NProgress from "nprogress"; // Progress 进度条
-import "nprogress/nprogress.css"; // Progress 进度条样式
+// import NProgress from "nprogress"; // Progress 进度条
+// import "nprogress/nprogress.css"; // Progress 进度条样式
 import { Message } from "element-ui";
-import { userManage } from "./router.js";
+import { userManage, productManage, productClassManage, supplierManage, purchaseManage, sellManage } from "./router.js";
 
 
 
@@ -16,24 +16,30 @@ function generateAsyncRouter(auth) {
     let accessRouter = []
 
     // 用户管理
-    if (!auth.user) {
+    if (auth.userPermission === "0") {
         accessRouter = accessRouter.concat(userManage)
     }
 
-    // 数据管理
-    // if (!adminInfo.data_operation) {
-    //     accessRouter = accessRouter.concat(dataManageRouter)
-    // }
+    if (auth.productPermission === "0") {
+        accessRouter = accessRouter.concat(productManage)
+    }
 
-    // // 财务管理
-    // if (!adminInfo.finance_operation) {
-    //     accessRouter = accessRouter.concat(financeManageRouter)
-    // }
+    if (auth.productPermission === "0") {
+        accessRouter = accessRouter.concat(productClassManage)
+    }
 
-    // // 订单管理
-    // if (!adminInfo.order_operation) {
-    //     accessRouter = accessRouter.concat(orderManageRouter)
-    // }
+    if(auth.supplierPermission === "0") {
+        accessRouter = accessRouter.concat(supplierManage)
+    }
+
+    if (auth.purchasePermission === "0") {
+        accessRouter = accessRouter.concat(purchaseManage)
+    }
+
+    if (auth.sellPermission === "0") {
+        accessRouter = accessRouter.concat(sellManage)
+    }
+
     return accessRouter;
 }
 
@@ -41,7 +47,7 @@ function generateAsyncRouter(auth) {
 const whiteList = ["/login", "/401", "/404", "/500"]; // 不重定向白名单
 router.beforeEach((to, from, next) => {
 
-    NProgress.start(); // 开启Progress
+    // NProgress.start(); // 开启Progress
     if (whiteList.indexOf(to.path) !== -1) {
         // 在免登录白名单，直接进入
         next();
@@ -52,7 +58,7 @@ router.beforeEach((to, from, next) => {
         // 判断是否有token
         if (to.path === "/login") {
             next({ path: "/" });
-            NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
+            // NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
             return;
         }
         if (!store.getters.profile) {
@@ -76,21 +82,20 @@ router.beforeEach((to, from, next) => {
                     //     return;
                     // }
 
-                    let accessedRouters = generateAsyncRouter(
-                        data.auth
-                    );
+                    // console.log(data.auth)
+                    let accessedRouters = generateAsyncRouter(data)
                     // 生成可访问的路由表
-                    router.addRoutes(accessedRouters); // 动态添加可访问路由表
-                    next({ ...to }); // hack方法 确保addRoutes已完成
+                    router.addRoutes(accessedRouters) // 动态添加可访问路由表
+                    next({ ...to }) // hack方法 确保addRoutes已完成
                     // 设置左边导航栏
                     store
                         .dispatch("filterRouter", { accessedRouters })
-                        .then(() => { });
+                        .then(() => { })
                 })
                 .catch(() => {
                     store.dispatch("fedLogout").then(() => {
-                        Message.error("验证失败,请重新登录");
-                        let redirect = to.fullPath;
+                        Message.error("验证失败,请重新登录")
+                        let redirect = to.fullPath
                         store.dispatch("loginOut").then(() => {
                             next({
                                 path: "/login",
@@ -107,6 +112,7 @@ router.beforeEach((to, from, next) => {
         //     return;
         // }
 
+        // eslint-disable-next-line no-constant-condition
         if (true) {
             next(); //
             return;
@@ -115,7 +121,7 @@ router.beforeEach((to, from, next) => {
             path: "/401",
             query: { noGoBack: true }
         });
-        NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
+        // NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
         return;
     }
     let redirect = to.fullPath;
@@ -125,9 +131,9 @@ router.beforeEach((to, from, next) => {
             query: { redirect: redirect }
         });
     }); // 否则全部重定向到登录页
-    NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
+    // NProgress.done(); // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
 });
 
 router.afterEach(() => {
-    NProgress.done(); // 结束Progress
+    // NProgress.done(); // 结束Progress
 });
