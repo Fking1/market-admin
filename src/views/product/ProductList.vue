@@ -152,14 +152,13 @@ export default {
 		handleClose(done) {
 			this.$confirm("确认关闭？")
 				.then(_ => {
-					this.productInfo = {}
+					// this.productInfo = {}
 					done()
 				})
 				.catch(_ => { })
 		},
 		handleConfirm(index) {
 			if (index === '1') {
-				this.productInfo = {}
 				this.productInfo.classId = this.classId
 				this.productInfo.supplierId = this.supplierId
 				addProduct(this.productInfo).then(res => {

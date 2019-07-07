@@ -44,7 +44,7 @@
                     <el-dropdown trigger="click">
                         <span>{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span @click="handlePassword">修改密码</span></el-dropdown-item>
+                            <!-- <el-dropdown-item><span @click="handlePassword">修改密码</span></el-dropdown-item> -->
                             <el-dropdown-item><span @click="loginOut">退出登录</span></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -212,7 +212,7 @@ export default {
                 if (valid) {
                     this.passwordLoading = true;
                     let data = Object.assign({}, this.passwordFormData);
-                    data.userId = getUserId();
+                    data.userId = getUserId()
                     password(data)
                         .then(res => {
                             this.passwordLoading = false;
